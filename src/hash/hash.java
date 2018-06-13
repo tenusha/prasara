@@ -27,6 +27,11 @@ public class hash extends javax.swing.JFrame {
 		int a=5;
 		int b = 12;
 	}
+	
+	void calc(){
+		
+		int a=1*3;
+	}
 
     /**
      * This method is called from within the constructor to initialize the form.
