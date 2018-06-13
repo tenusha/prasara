@@ -25,6 +25,7 @@ public class hash extends javax.swing.JFrame {
     }
 	void test(){
 		int a=5;
+		int b = 12;
 	}
 
     /**
