@@ -25,6 +25,12 @@ public class hash extends javax.swing.JFrame {
     }
 	void test(){
 		int a=5;
+		int b = 12;
+	}
+	
+	void calc(){
+		
+		int a=1*3;
 	}
 
     /**
