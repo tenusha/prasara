@@ -23,6 +23,9 @@ public class hash extends javax.swing.JFrame {
         h1.setBorder(BorderFactory.createLineBorder(Color.decode("#000000")));
         h2.setBorder(BorderFactory.createLineBorder(Color.decode("#000000")));
     }
+	void test(){
+		int a=5;
+	}
 
     /**
      * This method is called from within the constructor to initialize the form.
