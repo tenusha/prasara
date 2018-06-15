@@ -1,0 +1,413 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package inventory;
+
+import ITP.Home;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
+import static inventory.dbCon.con;
+import java.awt.Color;
+import static java.awt.SystemColor.window;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+/**
+ *
+ * @author Tenusha
+ */
+public class addStyle extends javax.swing.JFrame {
+
+    String st = "";
+    String cu = "";//edit customer
+    String sty = "";//edit style
+    //String co="";//edit color
+
+    /**
+     * Creates new form addNewStyleData
+     */
+    public addStyle() {
+        initComponents();
+
+        AutoCompleteDecorator.decorate(customer);
+        AutoCompleteDecorator.decorate(type);
+        AutoCompleteDecorator.decorate(method);
+
+        dbCon d = new dbCon();
+        d.connect();
+
+        try {
+            ResultSet rs = con.createStatement().executeQuery("SELECT name FROM customer");
+            while (rs.next()) {
+                customer.addItem(rs.getString("name"));
+            }
+
+            customer.setSelectedIndex(-1);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(addStyle.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public addStyle(String s, String sty, String cus) throws SQLException {
+        initComponents();
+
+        st = s;
+        cu = cus;
+        this.sty = sty;
+
+        ResultSet rs = con.createStatement().executeQuery("SELECT name FROM customer");
+        while (rs.next()) {
+            customer.addItem(rs.getString("name"));
+        }
+
+        AutoCompleteDecorator.decorate(type);
+        AutoCompleteDecorator.decorate(method);
+        AutoCompleteDecorator.decorate(customer);
+
+        submit.setText("Edit Style Data");
+        jLabel1.setText("Edit Style");
+
+        dbCon d = new dbCon();
+        d.connect();
+
+        updateForm();
+
+        style.setEditable(false);
+        customer.setEnabled(false);
+
+    }
+
+    void updateForm() throws SQLException {
+        ResultSet edit = con.createStatement().executeQuery("SELECT * FROM style WHERE styleNo='" + sty + "' AND customer = '" + cu + "'");
+        edit.next();
+        customer.setSelectedItem(edit.getString("customer"));
+        style.setText(edit.getString("styleNo"));
+        method.setSelectedItem(edit.getString("method"));
+        type.setSelectedItem(edit.getString("type"));
+        description.setText(edit.getString("description"));
+    }
+
+    public boolean formValidate() throws SQLException {
+
+        if ((customer.getSelectedIndex()) != -1) {
+            if ((type.getSelectedIndex()) != -1) {
+                if (style.getText().equals("")) {
+                    style.setBorder(BorderFactory.createLineBorder(Color.decode("#ff0000")));
+                    stylel.setText("please add a style#");
+                    return false;
+                } else {
+                    ResultSet rs = con.createStatement().executeQuery("SELECT styleNo FROM style WHERE styleNo = '" + style.getText() + "' AND customer = '" + customer.getSelectedItem() + "' ");
+                    if ((method.getSelectedIndex()) != -1) {
+
+                        if (rs.next()) {
+                            if (st.equals("edit")) {
+                                return true;
+                            } else {
+                                style.setBorder(BorderFactory.createLineBorder(Color.decode("#ff0000")));
+                                stylel.setText("customer's style exist");
+                                return false;
+                            }
+
+                        } else {
+                            return true;
+                        }
+                    } else {
+                        method.setBorder(BorderFactory.createLineBorder(Color.decode("#ff0000")));
+                        methodl.setText("please select a method");
+                        return false;
+                    }
+                }
+            } else {
+                type.setBorder(BorderFactory.createLineBorder(Color.decode("#ff0000")));
+                typel.setText("please select a type");
+                return false;
+            }
+        } else {
+            customer.setBorder(BorderFactory.createLineBorder(Color.decode("#ff0000")));
+            customerl.setText("please select a customer");
+            return false;
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        customer = new javax.swing.JComboBox<>();
+        method = new javax.swing.JComboBox<>();
+        type = new javax.swing.JComboBox<>();
+        style = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        submit = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JSeparator();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        description = new javax.swing.JTextArea();
+        minimize = new javax.swing.JLabel();
+        close = new javax.swing.JLabel();
+        methodl = new javax.swing.JLabel();
+        customerl = new javax.swing.JLabel();
+        typel = new javax.swing.JLabel();
+        stylel = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setUndecorated(true);
+        setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setMinimumSize(new java.awt.Dimension(514, 482));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setText("Add New Style Data");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 372, -1));
+
+        jSeparator2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 490, 13));
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText("Description");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 80, 35));
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel3.setText("Customer");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 80, 35));
+
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel4.setText("Type");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 80, 35));
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("Style #");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 230, 80, 35));
+
+        customer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerActionPerformed(evt);
+            }
+        });
+        jPanel1.add(customer, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, 270, 35));
+
+        method.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Wash", "Dye", "Dryer" }));
+        method.setSelectedIndex(-1);
+        jPanel1.add(method, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, 270, 35));
+
+        type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fabrics", "Garments", "Gloves" }));
+        type.setSelectedIndex(-1);
+        jPanel1.add(type, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, 270, 35));
+        jPanel1.add(style, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, 270, 38));
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel7.setText("Method");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 80, 35));
+
+        submit.setBackground(new java.awt.Color(0, 0, 255));
+        submit.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        submit.setForeground(new java.awt.Color(255, 255, 255));
+        submit.setText("Add Style Data");
+        submit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitActionPerformed(evt);
+            }
+        });
+        jPanel1.add(submit, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 450, 140, 40));
+
+        jSeparator3.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 490, 13));
+
+        description.setColumns(20);
+        description.setRows(5);
+        jScrollPane1.setViewportView(description);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 350, 270, 80));
+
+        minimize.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        minimize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inventoryImages/Minimize.png"))); // NOI18N
+        minimize.setAlignmentY(0.0F);
+        minimize.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                minimizeMouseClicked(evt);
+            }
+        });
+        jPanel1.add(minimize, new org.netbeans.lib.awtextra.AbsoluteConstraints(453, 0, 30, -1));
+
+        close.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inventoryImages/Close.png"))); // NOI18N
+        close.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closeMouseClicked(evt);
+            }
+        });
+        jPanel1.add(close, new org.netbeans.lib.awtextra.AbsoluteConstraints(483, 0, 30, -1));
+
+        methodl.setForeground(new java.awt.Color(255, 0, 0));
+        jPanel1.add(methodl, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 325, 270, 20));
+
+        customerl.setForeground(new java.awt.Color(255, 0, 0));
+        jPanel1.add(customerl, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 144, 270, 20));
+
+        typel.setForeground(new java.awt.Color(255, 0, 0));
+        jPanel1.add(typel, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 205, 270, 20));
+
+        stylel.setForeground(new java.awt.Color(255, 0, 0));
+        jPanel1.add(stylel, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 266, 270, 20));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
+        // TODO add your handling code here:
+        style.setBorder(BorderFactory.createLineBorder(Color.decode("#a0a0a0")));
+        customer.setBorder(BorderFactory.createLineBorder(Color.decode("#ffffff")));
+        method.setBorder(BorderFactory.createLineBorder(Color.decode("#ffffff")));
+        type.setBorder(BorderFactory.createLineBorder(Color.decode("#ffffff")));
+        stylel.setText("");
+        customerl.setText("");
+        methodl.setText("");
+        typel.setText("");
+
+        String cus = String.valueOf(customer.getSelectedItem());
+        String ty = String.valueOf(type.getSelectedItem());
+        String stl = style.getText();
+        String m = String.valueOf(method.getSelectedItem());
+        String des = description.getText();
+
+        try {
+            if (formValidate() == true) {
+                if (st.equals("edit")) {
+                    con.prepareStatement("UPDATE style set method='" + m + "',"
+                            + "type='" + ty + "', description='" + des + "'"
+                            + " WHERE  styleNo='" + stl + "' AND customer = '" + cus + "'").execute();
+                    JOptionPane.showMessageDialog(null, "Style Updated", "Done", JOptionPane.INFORMATION_MESSAGE);
+                    this.setVisible(false);
+                } else {
+                    try {
+                        con.prepareStatement("INSERT INTO style VALUES('" + cus + "','" + ty + "','" + stl + "','" + m + "','" + des + "')").execute();
+                        JOptionPane.showMessageDialog(null, "New Style Added", "Done", JOptionPane.INFORMATION_MESSAGE);
+                        customer.setSelectedIndex(-1);
+                        method.setSelectedIndex(-1);
+                        type.setSelectedIndex(-1);
+                        style.setText(null);
+                        description.setText(null);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(addStyle.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(addStyle.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Home.viewStyle.refresh();
+
+    }//GEN-LAST:event_submitActionPerformed
+
+    private void customerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customerActionPerformed
+
+    private void minimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_minimizeMouseClicked
+        // TODO add your handling code here:
+        this.setState(this.ICONIFIED);
+    }//GEN-LAST:event_minimizeMouseClicked
+
+    private void closeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_closeMouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(addStyle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(addStyle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(addStyle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(addStyle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new addStyle().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel close;
+    private javax.swing.JComboBox<String> customer;
+    private javax.swing.JLabel customerl;
+    private javax.swing.JTextArea description;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JComboBox<String> method;
+    private javax.swing.JLabel methodl;
+    private javax.swing.JLabel minimize;
+    private javax.swing.JTextField style;
+    private javax.swing.JLabel stylel;
+    public javax.swing.JButton submit;
+    private javax.swing.JComboBox<String> type;
+    private javax.swing.JLabel typel;
+    // End of variables declaration//GEN-END:variables
+}
