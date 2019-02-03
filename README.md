@@ -2,7 +2,7 @@
 
 Java based Stand Alone Application for a washing plant which accomplished inventory and process planning.
 
-<img src="https://i.ibb.co/nwJjw21/Untitled.jpg" alt="Untitled" border="0">
+<img src="https://i.ibb.co/FHKBCHX/Untitled1.png" alt="Untitled1" border="0">
 
 <img src="https://i.ibb.co/mCWM6L7/Untitled3.png" alt="Untitled3" border="0">
 
