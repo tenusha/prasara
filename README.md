@@ -15,3 +15,9 @@ Developed by ALPHA Team
 * Ranmal Dewage
 * Vimukthi Rajapaksha
 * Aravinda Kulasooriya
+
+## Copyright
+
+(C) 2019 ALPHA Team
+<br>
+[tenusha.wordpress.com](https://tenusha.wordpress.com)
